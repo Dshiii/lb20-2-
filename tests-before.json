@@ -1,0 +1,489 @@
+[
+  {
+    "name": "S01: Гистерезис влажности (память насоса)",
+    "steps": [
+      {
+        "input": {
+          "humidity": 20,
+          "temp": 20,
+          "age": 0,
+          "tank": 50,
+          "budget": 5,
+          "rain": false,
+          "reset": false
+        },
+        "expected": {
+          "pump": true,
+          "vent": false,
+          "fault": false,
+          "used": 2
+        }
+      },
+      {
+        "input": {
+          "humidity": 40,
+          "temp": 20,
+          "age": 0,
+          "tank": 50,
+          "budget": 5,
+          "rain": false,
+          "reset": false
+        },
+        "expected": {
+          "pump": true,
+          "vent": false,
+          "fault": false,
+          "used": 2
+        }
+      },
+      {
+        "input": {
+          "humidity": 45,
+          "temp": 20,
+          "age": 0,
+          "tank": 50,
+          "budget": 5,
+          "rain": false,
+          "reset": false
+        },
+        "expected": {
+          "pump": false,
+          "vent": false,
+          "fault": false,
+          "used": 0
+        }
+      }
+    ]
+  },
+  {
+    "name": "S02: Гистерезис температуры (память вентиляции)",
+    "steps": [
+      {
+        "input": {
+          "humidity": 50,
+          "temp": 31,
+          "age": 0,
+          "tank": 50,
+          "budget": 5,
+          "rain": false,
+          "reset": false
+        },
+        "expected": {
+          "pump": false,
+          "vent": true,
+          "fault": false,
+          "used": 3
+        }
+      },
+      {
+        "input": {
+          "humidity": 50,
+          "temp": 28,
+          "age": 0,
+          "tank": 50,
+          "budget": 5,
+          "rain": false,
+          "reset": false
+        },
+        "expected": {
+          "pump": false,
+          "vent": true,
+          "fault": false,
+          "used": 3
+        }
+      },
+      {
+        "input": {
+          "humidity": 50,
+          "temp": 26,
+          "age": 0,
+          "tank": 50,
+          "budget": 5,
+          "rain": false,
+          "reset": false
+        },
+        "expected": {
+          "pump": false,
+          "vent": false,
+          "fault": false,
+          "used": 0
+        }
+      }
+    ]
+  },
+  {
+    "name": "S03: Авария по невалидному вводу (R01)",
+    "steps": [
+      {
+        "input": {
+          "humidity": null,
+          "temp": 20,
+          "age": 0,
+          "tank": 50,
+          "budget": 5,
+          "rain": false,
+          "reset": false
+        },
+        "expected": {
+          "pump": false,
+          "vent": false,
+          "fault": true,
+          "used": 0
+        }
+      },
+      {
+        "input": {
+          "humidity": "20",
+          "temp": 20,
+          "age": 0,
+          "tank": 50,
+          "budget": 5,
+          "rain": false,
+          "reset": false
+        },
+        "expected": {
+          "pump": false,
+          "vent": false,
+          "fault": true,
+          "used": 0
+        }
+      }
+    ]
+  },
+  {
+    "name": "S04: Устаревший снимок и сброс (R02, R03)",
+    "steps": [
+      {
+        "input": {
+          "humidity": 20,
+          "temp": 20,
+          "age": 31,
+          "tank": 50,
+          "budget": 5,
+          "rain": false,
+          "reset": false
+        },
+        "expected": {
+          "pump": false,
+          "vent": false,
+          "fault": true,
+          "used": 0
+        }
+      },
+      {
+        "input": {
+          "humidity": 20,
+          "temp": 20,
+          "age": 0,
+          "tank": 50,
+          "budget": 5,
+          "rain": false,
+          "reset": false
+        },
+        "expected": {
+          "pump": false,
+          "vent": false,
+          "fault": true,
+          "used": 0
+        }
+      },
+      {
+        "input": {
+          "humidity": 20,
+          "temp": 20,
+          "age": 0,
+          "tank": 50,
+          "budget": 5,
+          "rain": false,
+          "reset": true
+        },
+        "expected": {
+          "pump": true,
+          "vent": false,
+          "fault": false,
+          "used": 2
+        }
+      }
+    ]
+  },
+  {
+    "name": "S05: Конкуренция за бюджет (R09)",
+    "steps": [
+      {
+        "input": {
+          "humidity": 20,
+          "temp": 32,
+          "age": 0,
+          "tank": 50,
+          "budget": 2,
+          "rain": false,
+          "reset": false
+        },
+        "expected": {
+          "pump": true,
+          "vent": false,
+          "fault": false,
+          "used": 2
+        }
+      },
+      {
+        "input": {
+          "humidity": 20,
+          "temp": 32,
+          "age": 0,
+          "tank": 50,
+          "budget": 3,
+          "rain": false,
+          "reset": false
+        },
+        "expected": {
+          "pump": false,
+          "vent": true,
+          "fault": false,
+          "used": 3
+        }
+      },
+      {
+        "input": {
+          "humidity": 20,
+          "temp": 32,
+          "age": 0,
+          "tank": 50,
+          "budget": 5,
+          "rain": false,
+          "reset": false
+        },
+        "expected": {
+          "pump": true,
+          "vent": true,
+          "fault": false,
+          "used": 5
+        }
+      }
+    ]
+  },
+  {
+    "name": "S06: Запреты полива (R06, R07, R08)",
+    "steps": [
+      {
+        "input": {
+          "humidity": 20,
+          "temp": 3,
+          "age": 0,
+          "tank": 50,
+          "budget": 5,
+          "rain": false,
+          "reset": false
+        },
+        "expected": {
+          "pump": false,
+          "vent": false,
+          "fault": false,
+          "used": 0
+        }
+      },
+      {
+        "input": {
+          "humidity": 20,
+          "temp": 20,
+          "age": 0,
+          "tank": 50,
+          "budget": 5,
+          "rain": true,
+          "reset": false
+        },
+        "expected": {
+          "pump": false,
+          "vent": false,
+          "fault": false,
+          "used": 0
+        }
+      },
+      {
+        "input": {
+          "humidity": 20,
+          "temp": 20,
+          "age": 0,
+          "tank": 9.9,
+          "budget": 5,
+          "rain": false,
+          "reset": false
+        },
+        "expected": {
+          "pump": false,
+          "vent": false,
+          "fault": false,
+          "used": 0
+        }
+      }
+    ]
+  },
+  {
+    "name": "S07: Потеря памяти после запрета (R10)",
+    "steps": [
+      {
+        "input": {
+          "humidity": 20,
+          "temp": 20,
+          "age": 0,
+          "tank": 50,
+          "budget": 5,
+          "rain": false,
+          "reset": false
+        },
+        "expected": {
+          "pump": true,
+          "vent": false,
+          "fault": false,
+          "used": 2
+        }
+      },
+      {
+        "input": {
+          "humidity": 20,
+          "temp": 20,
+          "age": 0,
+          "tank": 50,
+          "budget": 5,
+          "rain": true,
+          "reset": false
+        },
+        "expected": {
+          "pump": false,
+          "vent": false,
+          "fault": false,
+          "used": 0
+        }
+      },
+      {
+        "input": {
+          "humidity": 40,
+          "temp": 20,
+          "age": 0,
+          "tank": 50,
+          "budget": 5,
+          "rain": false,
+          "reset": false
+        },
+        "expected": {
+          "pump": false,
+          "vent": false,
+          "fault": false,
+          "used": 0
+        }
+      }
+    ]
+  },
+  {
+    "name": "S08: Границы допустимости (R01)",
+    "steps": [
+      {
+        "input": {
+          "humidity": 0,
+          "temp": -10,
+          "age": 0,
+          "tank": 0,
+          "budget": 0,
+          "rain": false,
+          "reset": false
+        },
+        "expected": {
+          "pump": false,
+          "vent": false,
+          "fault": false,
+          "used": 0
+        }
+      },
+      {
+        "input": {
+          "humidity": 100,
+          "temp": 50,
+          "age": 30,
+          "tank": 100,
+          "budget": 6,
+          "rain": false,
+          "reset": false
+        },
+        "expected": {
+          "pump": false,
+          "vent": true,
+          "fault": false,
+          "used": 3
+        }
+      },
+      {
+        "input": {
+          "humidity": -0.1,
+          "temp": 20,
+          "age": 0,
+          "tank": 50,
+          "budget": 5,
+          "rain": false,
+          "reset": false
+        },
+        "expected": {
+          "pump": false,
+          "vent": false,
+          "fault": true,
+          "used": 0
+        }
+      }
+    ]
+  },
+  {
+    "name": "S09: Точные границы для убийства мутаций",
+    "steps": [
+      {
+        "input": {
+          "humidity": 35,
+          "temp": 20,
+          "age": 0,
+          "tank": 50,
+          "budget": 5,
+          "rain": false,
+          "reset": false
+        },
+        "expected": {
+          "pump": false,
+          "vent": false,
+          "fault": false,
+          "used": 0
+        }
+      },
+      {
+        "input": {
+          "humidity": 50,
+          "temp": 30,
+          "age": 0,
+          "tank": 50,
+          "budget": 5,
+          "rain": false,
+          "reset": false
+        },
+        "expected": {
+          "pump": false,
+          "vent": true,
+          "fault": false,
+          "used": 3
+        }
+      },
+      {
+        "input": {
+          "humidity": 20,
+          "temp": 20,
+          "age": 0,
+          "tank": 10,
+          "budget": 5,
+          "rain": false,
+          "reset": false
+        },
+        "expected": {
+          "pump": true,
+          "vent": false,
+          "fault": false,
+          "used": 2
+        }
+      }
+    ]
+  }
+]

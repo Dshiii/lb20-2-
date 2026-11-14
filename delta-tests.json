@@ -1,0 +1,37 @@
+[
+  {
+    "name": "Delta-2.1: Включение насоса при humidity=39 (новая граница)",
+    "steps": [
+      {
+        "input": {"humidity": 39, "temp": 20, "age": 0, "tank": 50, "budget": 5, "rain": false, "reset": false},
+        "expected": {"pump": true, "vent": false, "fault": false, "used": 2}
+      }
+    ]
+  },
+  {
+    "name": "Delta-2.1: Гистерезис при humidity=40 (новая зона)",
+    "steps": [
+      {
+        "input": {"humidity": 20, "temp": 20, "age": 0, "tank": 50, "budget": 5, "rain": false, "reset": false},
+        "expected": {"pump": true, "vent": false, "fault": false, "used": 2}
+      },
+      {
+        "input": {"humidity": 40, "temp": 20, "age": 0, "tank": 50, "budget": 5, "rain": false, "reset": false},
+        "expected": {"pump": true, "vent": false, "fault": false, "used": 2}
+      }
+    ]
+  },
+  {
+    "name": "Delta-2.1: Выключение насоса при humidity=45 (без изменений)",
+    "steps": [
+      {
+        "input": {"humidity": 20, "temp": 20, "age": 0, "tank": 50, "budget": 5, "rain": false, "reset": false},
+        "expected": {"pump": true, "vent": false, "fault": false, "used": 2}
+      },
+      {
+        "input": {"humidity": 45, "temp": 20, "age": 0, "tank": 50, "budget": 5, "rain": false, "reset": false},
+        "expected": {"pump": false, "vent": false, "fault": false, "used": 0}
+      }
+    ]
+  }
+]
